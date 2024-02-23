@@ -5,7 +5,7 @@ import jakarta.persistence.*
 @Entity
 class MemberBan(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long? = null,
     @ManyToOne
     @JoinColumn(name = "member_id")
     val member: Member,
@@ -17,7 +17,7 @@ class MemberBan(
 ) {
     companion object {
         fun fixture(
-            id: Long = 0,
+            id: Long? = null,
             member: Member = Member.fixture(),
             bamMember: Member = Member.fixture(),
             memberName: String = "memberName",

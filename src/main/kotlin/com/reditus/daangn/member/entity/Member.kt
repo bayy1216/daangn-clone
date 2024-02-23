@@ -9,7 +9,7 @@ import jakarta.persistence.*
 @Entity
 class Member(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long? = null,
 
     var nickname: String?,
     var email: String,
@@ -29,7 +29,7 @@ class Member(
 
     companion object{
         fun fixture(
-            id: Long = 0,
+            id: Long? = null,
             nickname: String? = null,
             email: String = "test@exmaple.com",
             password: String? = null,

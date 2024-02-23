@@ -6,7 +6,7 @@ import java.time.LocalTime
 @Entity
 class MemberSetting(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id:Long,
+    val id:Long? = null,
     @OneToOne
     @JoinColumn(name = "member_id")
     val member : Member,
@@ -14,14 +14,20 @@ class MemberSetting(
     var noAlarmStartTime: LocalTime?,
     var noAlarmEndTime: LocalTime?,
 ) {
+    init {
+        if(noAlarmStartTime != null || noAlarmEndTime != null){
+            require(noAlarmStartTime != null && noAlarmEndTime != null)
+            require(noAlarmStartTime!!.isBefore(noAlarmEndTime))
+        }
+    }
 
     companion object{
         fun fixture(
-            id: Long = 0,
+            id: Long? = null,
             member: Member = Member.fixture(),
             memberPhoneNumber: String? = null,
-            noAlarmStartTime: LocalTime? = null,
-            noAlarmEndTime: LocalTime? = null,
+            noAlarmStartTime: LocalTime? = LocalTime.of(8,0),
+            noAlarmEndTime: LocalTime? = LocalTime.of(22,0)
         ) = MemberSetting(
             id = id,
             member = member,

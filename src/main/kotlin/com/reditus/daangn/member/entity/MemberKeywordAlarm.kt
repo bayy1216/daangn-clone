@@ -5,7 +5,7 @@ import jakarta.persistence.*
 @Entity
 class MemberKeywordAlarm(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long? = null,
     @ManyToOne
     @JoinColumn(name = "member_id")
     val member: Member,
@@ -13,7 +13,7 @@ class MemberKeywordAlarm(
 ) {
     companion object {
         fun fixture(
-            id: Long = 0,
+            id: Long? = null,
             member: Member = Member.fixture(),
             keyword: String = "keyword",
         ) = MemberKeywordAlarm(
