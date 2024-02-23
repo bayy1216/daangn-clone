@@ -19,7 +19,7 @@ nginx를 이용하여 blue-green 배포를 적용하기 위한 프로젝트입�
 - `nginx`
 
 ## Architecture
-- Simple 3-Laeyr Architecture
+- Simple 3-Layer Architecture
 - `Controller` - `Service` - `Repository`
 - `DTO` - `Entity`
 
