@@ -4,11 +4,7 @@ import com.reditus.daangn.core.domain.MemberType
 import com.reditus.daangn.core.entity.BaseTimeEntity
 import com.reditus.daangn.member.domain.MemberState
 import com.reditus.daangn.member.domain.Vendor
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import org.hibernate.usertype.UserType
+import jakarta.persistence.*
 
 @Entity
 class Member(
@@ -20,8 +16,11 @@ class Member(
     var password: String?,
     var profileImageUrl: String?,
 
+    @Enumerated(EnumType.STRING)
     var vendor: Vendor,
+    @Enumerated(EnumType.STRING)
     var state: MemberState,
+    @Enumerated(EnumType.STRING)
     var type:MemberType,
 
     var fcmToken: String?,
