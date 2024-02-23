@@ -21,6 +21,6 @@ logging:
         SQL: debug
         type: trace
 jwt:
-  secret: "b9ba6041-9927-4bf8-9bfa-fdaf95ae5a9b"
+  secret: "b9ba604a99274bf89bfafdaf95ae5a9bdasdsafassaf"
   access-token-expire-time: 1800000
   refresh-token-expire-time: 2592000000
