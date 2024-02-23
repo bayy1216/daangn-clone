@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse
 import org.springframework.stereotype.Component
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.HandlerInterceptor
+import org.springframework.web.servlet.resource.ResourceHttpRequestHandler
 import kotlin.reflect.KClass
 
 @Component
@@ -18,6 +19,9 @@ class JwtInterceptor(
     private val dataUtils: DataUtils,
 ) : HandlerInterceptor {
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
+        if(handler is ResourceHttpRequestHandler){
+            throw IllegalArgumentException("${request.method} ${request.requestURI}는 존재하지 않는 경로입니다.")
+        }
         /**
          * [JwtFilterExclusion] 어노테이션이 붙어있는 경우에는 통과
          */
@@ -55,7 +59,7 @@ class JwtInterceptor(
     }
 
     private fun checkAnnotation(handler:Any, clazz: KClass<out Annotation>) : Boolean{
-        val handlerMethod = handler as? HandlerMethod
-        return handlerMethod?.method?.getAnnotation(clazz.java) != null
+        val handlerMethod = handler as HandlerMethod
+        return handlerMethod.getMethodAnnotation(clazz.java) != null
     }
 }
