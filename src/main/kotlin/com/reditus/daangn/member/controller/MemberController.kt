@@ -21,7 +21,6 @@ class MemberController(
     @JwtFilterExclusion
     @PostMapping
     fun createMember(@Valid @RequestBody request: EmailSignupRequest) : JwtToken{
-        println("createMember : $request")
         memberService.createMember(request)
         return authService.login(request.email, request.password)
     }
