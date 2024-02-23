@@ -1,5 +1,6 @@
 package com.reditus.daangn.member.entity
 
+import com.reditus.daangn.core.entity.BaseTimeEntity
 import jakarta.persistence.*
 
 @Entity
@@ -14,7 +15,7 @@ class MemberBan(
     val bamMember: Member,
     var memberName: String,
     var banMemberAddress: String,
-) {
+) :BaseTimeEntity(){
     companion object {
         fun fixture(
             id: Long? = null,

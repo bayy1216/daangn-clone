@@ -1,5 +1,6 @@
 package com.reditus.daangn.saleposts.entity
 
+import com.reditus.daangn.core.entity.BaseTimeEntity
 import com.reditus.daangn.location.entity.Location
 import com.reditus.daangn.member.entity.Member
 import com.reditus.daangn.saleposts.domain.SalePostCategory
@@ -28,7 +29,7 @@ class SalePost(
     var countInfo: CountInfo,
     @Enumerated(EnumType.STRING)
     var status:SalePostStatus,
-) {
+) : BaseTimeEntity(){
 
     companion object{
         fun create(command: SalePostCreateCommand): SalePost {

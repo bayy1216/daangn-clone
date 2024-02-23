@@ -1,5 +1,6 @@
 package com.reditus.daangn.member.entity
 
+import com.reditus.daangn.core.entity.BaseTimeEntity
 import com.reditus.daangn.location.entity.Location
 import jakarta.persistence.*
 
@@ -14,7 +15,7 @@ class MemberLocation(
     @JoinColumn(name = "location_id")
     val location: Location,
     var current: Boolean,
-) {
+) : BaseTimeEntity() {
     companion object {
         fun fixture(
             id: Long? = null,

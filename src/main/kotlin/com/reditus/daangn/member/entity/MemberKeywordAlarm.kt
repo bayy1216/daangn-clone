@@ -1,5 +1,6 @@
 package com.reditus.daangn.member.entity
 
+import com.reditus.daangn.core.entity.BaseTimeEntity
 import jakarta.persistence.*
 
 @Entity
@@ -10,7 +11,7 @@ class MemberKeywordAlarm(
     @JoinColumn(name = "member_id")
     val member: Member,
     val keyword: String,
-) {
+) :BaseTimeEntity(){
     companion object {
         fun fixture(
             id: Long? = null,

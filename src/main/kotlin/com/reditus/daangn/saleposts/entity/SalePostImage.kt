@@ -1,5 +1,6 @@
 package com.reditus.daangn.saleposts.entity
 
+import com.reditus.daangn.core.entity.BaseTimeEntity
 import jakarta.persistence.*
 
 @Entity
@@ -11,7 +12,7 @@ class SalePostImage(
     val salePost: SalePost,
     val imageUrl: String,
     val imageName: String,
-) {
+) : BaseTimeEntity() {
     companion object {
         fun fixture(
             id: Long? = null,

@@ -1,5 +1,6 @@
 package com.reditus.daangn.member.entity
 
+import com.reditus.daangn.core.entity.BaseTimeEntity
 import jakarta.persistence.*
 import java.time.LocalTime
 
@@ -13,7 +14,7 @@ class MemberSetting(
     var memberPhoneNumber: String?,
     var noAlarmStartTime: LocalTime?,
     var noAlarmEndTime: LocalTime?,
-) {
+) : BaseTimeEntity(){
     init {
         if(noAlarmStartTime != null || noAlarmEndTime != null){
             require(noAlarmStartTime != null && noAlarmEndTime != null)
