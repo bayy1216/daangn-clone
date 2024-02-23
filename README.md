@@ -7,7 +7,7 @@ nginx를 이용하여 blue-green 배포를 적용하기 위한 프로젝트입�
 ## TechStack
 - `kotlin`
 - `spring boot`
-- `jpa`
+- `jpa` `data-jpa`
 - `querydsl`
 - `postgresql`
 - `redis`
@@ -25,3 +25,6 @@ nginx를 이용하여 blue-green 배포를 적용하기 위한 프로젝트입�
 
 ## ERD
 [ERD CLOUD](https://www.erdcloud.com/d/Y7YFxXZM2PaHs6ZdC)
+
+## 개발기간
+- 2024.02.23 ~ 2024.xx.xx
