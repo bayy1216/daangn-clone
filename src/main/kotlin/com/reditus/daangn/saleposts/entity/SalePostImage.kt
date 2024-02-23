@@ -1,6 +1,5 @@
-package com.reditus.daangn.saleposts.domain
+package com.reditus.daangn.saleposts.entity
 
-import com.reditus.daangn.saleposts.entity.SalePost
 import jakarta.persistence.*
 
 @Entity
