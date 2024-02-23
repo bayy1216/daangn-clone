@@ -1,5 +1,6 @@
 package com.reditus.daangn.saleposts.entity
 
+import com.reditus.daangn.location.entity.Location
 import com.reditus.daangn.member.entity.Member
 import com.reditus.daangn.saleposts.domain.SalePostCategory
 import com.reditus.daangn.saleposts.domain.SalePostStatus
@@ -16,6 +17,9 @@ class SalePost(
     var title: String,
     var price: Int,
     var description: String,
+    @ManyToOne
+    @JoinColumn(name = "location_id")
+    var location:Location,
     @Embedded
     var locationInfo: LocationInfo,
     @Enumerated(EnumType.STRING)
@@ -33,6 +37,7 @@ class SalePost(
             title: String = "title",
             price: Int = 1000,
             description: String = "description",
+            location: Location = Location.fixture(),
             locationInfo: LocationInfo = LocationInfo.fixture(),
             category: SalePostCategory = SalePostCategory.ELECTRONICS,
             countInfo: CountInfo = CountInfo.fixture(),
@@ -43,6 +48,7 @@ class SalePost(
             title = title,
             price = price,
             description = description,
+            location = location,
             locationInfo = locationInfo,
             category = category,
             countInfo = countInfo,
