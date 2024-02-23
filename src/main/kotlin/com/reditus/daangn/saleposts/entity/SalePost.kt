@@ -31,6 +31,19 @@ class SalePost(
 ) {
 
     companion object{
+        fun create(command: SalePostCreateCommand): SalePost {
+            return SalePost(
+                member = command.member,
+                title = command.title,
+                price = command.price,
+                description = command.description,
+                location = command.location,
+                locationInfo = command.locationInfo,
+                category = command.category,
+                countInfo = CountInfo(viewCount = 0, interestCount = 0, chatCount = 0),
+                status = SalePostStatus.ACTIVE
+            )
+        }
         fun fixture(
             id: Long? = null,
             member: Member = Member.fixture(),
@@ -105,3 +118,13 @@ class CountInfo(
         )
     }
 }
+
+data class SalePostCreateCommand(
+    val member: Member,
+    val title: String,
+    val price: Int,
+    val description: String,
+    val location: Location,
+    val locationInfo: LocationInfo,
+    val category: SalePostCategory,
+)
