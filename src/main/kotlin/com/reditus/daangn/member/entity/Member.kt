@@ -27,7 +27,35 @@ class Member(
     var alarm: Boolean,
 ) : BaseTimeEntity(){
 
+    fun update(command: MemberUpdateCommand): Member {
+        return Member(
+            id = this.id,
+            nickname = command.nickname ?: this.nickname,
+            email = this.email,
+            password = command.password ?: this.password,
+            vendor = command.vendor ?: this.vendor,
+            type = command.type ?: this.type,
+            profileImageUrl = command.profileImageUrl ?: this.profileImageUrl,
+            fcmToken = command.fcmToken ?: this.fcmToken,
+            state = command.state ?: this.state,
+            alarm = command.alarm ?: this.alarm,
+        )
+    }
+
     companion object{
+        fun create(command: MemberCreateCommand): Member {
+            return Member(
+                nickname = command.nickname,
+                email = command.email,
+                password = command.password,
+                vendor = command.vendor,
+                type = command.type,
+                profileImageUrl = command.profileImageUrl,
+                fcmToken = command.fcmToken,
+                state = MemberState.ACTIVE,
+                alarm = true,
+            )
+        }
         fun fixture(
             id: Long? = null,
             nickname: String? = null,
@@ -53,3 +81,24 @@ class Member(
         )
     }
 }
+
+data class MemberCreateCommand(
+    val nickname: String,
+    val email: String,
+    val password: String?,
+    val vendor: Vendor,
+    val type: MemberType,
+    val profileImageUrl: String?,
+    val fcmToken: String?,
+)
+
+data class MemberUpdateCommand(
+    val nickname: String?,
+    val password: String?,
+    val profileImageUrl: String?,
+    val vendor: Vendor?,
+    val state: MemberState?,
+    val type:MemberType?,
+    val fcmToken: String?,
+    val alarm: Boolean?,
+)
