@@ -11,7 +11,7 @@ class Member(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
-    var nickname: String?,
+    var nickname: String,
     var email: String,
     var password: String?,
     var profileImageUrl: String?,
@@ -58,7 +58,7 @@ class Member(
         }
         fun fixture(
             id: Long? = null,
-            nickname: String? = null,
+            nickname: String = "심심한포로도",
             email: String = "test@exmaple.com",
             password: String? = null,
             profileImageUrl: String? = null,
