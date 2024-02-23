@@ -16,3 +16,9 @@ class DataUtils {
         return Base64.getDecoder().decode(encoded)
     }
 }
+
+/**
+ * 임시용 API
+ */
+@Retention(AnnotationRetention.SOURCE)
+annotation class TemporaryApi
