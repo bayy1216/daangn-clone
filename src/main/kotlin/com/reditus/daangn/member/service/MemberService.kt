@@ -13,6 +13,9 @@ class MemberService(
     @Transactional
     fun createMember(request: EmailSignupRequest): Long {
         val command = request.toCommand()
+        if(memberRepository.findByEmail(command.email) != null) {
+            throw IllegalArgumentException("이미 존재하는 이메일입니다.")
+        }
         val member = Member.create(command)
         return memberRepository.save(member).id!!
     }
