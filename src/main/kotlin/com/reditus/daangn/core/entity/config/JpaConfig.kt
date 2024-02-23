@@ -1,4 +1,4 @@
-package com.reditus.daangn.core.config
+package com.reditus.daangn.core.entity.config
 
 import com.querydsl.jpa.impl.JPAQueryFactory
 import jakarta.persistence.EntityManager
