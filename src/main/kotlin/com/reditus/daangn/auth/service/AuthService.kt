@@ -5,6 +5,7 @@ import com.reditus.daangn.core.jwt.JwtProvider
 import com.reditus.daangn.core.jwt.JwtToken
 import com.reditus.daangn.core.jwt.MemberAuth
 import com.reditus.daangn.member.repository.MemberRepository
+import io.jsonwebtoken.JwtException
 import org.springframework.stereotype.Service
 
 @Service
@@ -19,6 +20,14 @@ class AuthService(
         member.validCheck()
 
         val memberAuth = MemberAuth(member.id!!, member.type)
+        return jwtProvider.createToken(memberAuth)
+    }
+
+    fun refresh(token: String): JwtToken {
+        if(!jwtProvider.validateToken(token)){
+            throw JwtException("토큰이 유효하지 않습니다.")
+        }
+        val memberAuth = jwtProvider.extractMemberAuth(token)
         return jwtProvider.createToken(memberAuth)
     }
 }

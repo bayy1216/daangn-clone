@@ -24,4 +24,11 @@ class AuthController(
         val (email, password) = String(dataUtils.decodeBase64(rawString)).split(":")
         return authService.login(email, password)
     }
+
+    @JwtFilterExclusion
+    @PostMapping("/refresh")
+    fun refresh(@RequestHeader("Authorization") rawHeader: String) :JwtToken{
+        val token = dataUtils.extractAuthorizationHeader(rawHeader, false)
+        return authService.refresh(token)
+    }
 }

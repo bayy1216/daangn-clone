@@ -29,6 +29,7 @@ class JwtProvider(
         return Jwts.builder()
             .subject(memberAuth.id.toString())
             .claim(TYPE, memberAuth.type)
+            .claim(IS_ACCESS, isAccessToken)
             .issuedAt(now)
             .expiration(Date(expirationTime))
             .signWith(key, Jwts.SIG.HS256)
@@ -44,9 +45,12 @@ class JwtProvider(
     }
 
 
-    fun validateToken(rawToken: String) : Boolean {
+    fun validateToken(rawToken: String, isAccessToken:Boolean = true) : Boolean {
         val claims = extractClaims(rawToken)
         val expiration = claims.expiration
+        if(!isAccessToken && !(claims[IS_ACCESS] as Boolean)){
+            return false
+        }
         return expiration.after(Date())
     }
     private fun extractClaims(rawToken: String): Claims {
@@ -59,5 +63,6 @@ class JwtProvider(
 
     companion object {
         const val TYPE = "type"
+        const val IS_ACCESS = "isAccess"
     }
 }
