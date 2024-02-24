@@ -4,6 +4,7 @@ import com.reditus.daangn.core.controller.dto.PagingResponse
 import com.reditus.daangn.core.exception.ResourceNotFoundException
 import com.reditus.daangn.core.utils.TemporaryApi
 import com.reditus.daangn.core.utils.findByIdOrThrow
+import com.reditus.daangn.image.ImageService
 import com.reditus.daangn.location.service.LocationService
 import com.reditus.daangn.member.repository.MemberRepository
 import com.reditus.daangn.saleposts.controller.dto.request.CreateSalePostRequest
@@ -11,6 +12,8 @@ import com.reditus.daangn.saleposts.controller.dto.request.PagingSalePostsParams
 import com.reditus.daangn.saleposts.controller.dto.request.UpdateSalePostRequest
 import com.reditus.daangn.saleposts.controller.dto.response.SalePostDto
 import com.reditus.daangn.saleposts.entity.SalePost
+import com.reditus.daangn.saleposts.entity.SalePostImage
+import com.reditus.daangn.saleposts.repository.SalePostImageRepository
 import com.reditus.daangn.saleposts.repository.SalePostRepository
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
@@ -21,7 +24,9 @@ import org.springframework.transaction.annotation.Transactional
 class SalePostService(
     private val memberRepository: MemberRepository,
     private val salePostRepository: SalePostRepository,
+    private val salePostImageRepository: SalePostImageRepository,
     private val locationService: LocationService,
+    private val imageService: ImageService,
 ) {
     @Transactional
     fun createSalePost(id: Long, request: CreateSalePostRequest) : Long{
@@ -32,16 +37,28 @@ class SalePostService(
         val command = request.toCommand(member, location)
         val post = SalePost.create(command)
 
-        // TODO imageService.uploadImages(request.images)
+        val imageUrls = imageService.uploadImage(request.imageIds)
+        val salePostImages = imageUrls.map { url ->
+            SalePostImage(
+                salePost = post,
+                imageUrl = url
+            )
+        }
+
+        salePostImageRepository.saveAll(salePostImages)
         salePostRepository.save(post)
 
         return post.id!!
     }
 
-    @TemporaryApi
+    @TemporaryApi("섬네일 이미지 불러오기 N+1 문제 존재")
     fun pagingSalePost(id: Long, requestParam: PagingSalePostsParams) :PagingResponse<SalePostDto>{
         val data = salePostRepository.findAllByOrderById(PageRequest.of(requestParam.page, requestParam.size))
-        val dto = data.map { SalePostDto.from(it) }.toList()
+
+        val dto = data.map {
+            val imageUrl = salePostImageRepository.findFirstBySalePostId(it.id!!)?.imageUrl
+            SalePostDto.from(it, imageUrl)
+        }.toList()
         return PagingResponse(hasNext = data.hasNext(), data = dto)
     }
 

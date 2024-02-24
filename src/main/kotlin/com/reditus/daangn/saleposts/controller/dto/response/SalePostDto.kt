@@ -10,6 +10,7 @@ import java.time.LocalDateTime
 data class SalePostDto(
     val id: Long,
     val writer: WriterDto,
+    val imageUrl : String?,
     val title: String,
     val price: Int,
     val description: String,
@@ -20,10 +21,11 @@ data class SalePostDto(
     val createdDate: LocalDateTime,
 ){
     companion object {
-        fun from(salePost: SalePost): SalePostDto {
+        fun from(salePost: SalePost, imageUrls: String?): SalePostDto {
             return SalePostDto(
                 id = salePost.id!!,
                 writer = WriterDto.from(salePost.member),
+                imageUrl = imageUrls,
                 title = salePost.title,
                 price = salePost.price,
                 description = salePost.description,

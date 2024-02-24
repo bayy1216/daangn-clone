@@ -1,5 +1,6 @@
 package com.reditus.daangn.image
 
+import com.reditus.daangn.core.utils.TemporaryApi
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
@@ -53,16 +54,19 @@ class ImageServiceV0 : ImageService {
         }
     }
 
+    @TemporaryApi
     override fun uploadImage(imageIds: List<String>): List<String> {
-        TODO("Not yet implemented")
+        return imageIds
     }
 
+    @TemporaryApi
     override fun getImage(imageIds: List<String>): List<String> {
-        TODO("Not yet implemented")
+        return imageIds
     }
 
+    @TemporaryApi
     override fun deleteImage(imageId: Long) {
-        TODO("Not yet implemented")
+
     }
 
     private fun getFileFolder(memberId: Long): File {

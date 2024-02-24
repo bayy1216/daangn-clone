@@ -24,7 +24,7 @@ data class UpdateSalePostRequest(
     @field: NotBlank(message = "위치를 입력해주세요.")
     val locationName: String,
     @field: NotNull(message = "이미지를 입력해주세요.")
-    val imageIds: List<Long>
+    val imageIds: List<String>
 ){
     fun toCommand(location: Location): SalePostUpdateCommand {
         return SalePostUpdateCommand(
