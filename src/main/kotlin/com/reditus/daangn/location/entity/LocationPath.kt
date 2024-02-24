@@ -6,7 +6,7 @@ import jakarta.persistence.*
 class LocationPath(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "location_id")
     val location: Location,
     var longitude: String,

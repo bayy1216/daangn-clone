@@ -7,7 +7,7 @@ import jakarta.persistence.*
 class SalePostImage(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sale_post_id")
     val salePost: SalePost,
     val imageUrl: String,

@@ -7,7 +7,7 @@ import jakarta.persistence.*
 class MemberKeywordAlarm(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     val member: Member,
     val keyword: String,

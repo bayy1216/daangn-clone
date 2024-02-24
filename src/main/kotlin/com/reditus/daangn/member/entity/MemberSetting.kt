@@ -8,7 +8,7 @@ import java.time.LocalTime
 class MemberSetting(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id:Long? = null,
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     val member : Member,
     var memberPhoneNumber: String?,
