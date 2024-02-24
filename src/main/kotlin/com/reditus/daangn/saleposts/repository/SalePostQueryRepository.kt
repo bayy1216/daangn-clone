@@ -39,6 +39,7 @@ class SalePostQueryRepository(
             .select(QSalePost.salePost)
             .from(QSalePost.salePost)
             .join(QSalePost.salePost.member).fetchJoin()
+            .join(QSalePost.salePost.location).fetchJoin()
             .where(whereCondition)
             .offset(pageable.offset)
             .limit(pageable.pageSize.toLong())
