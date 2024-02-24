@@ -29,15 +29,15 @@ class SalePostService(
     private val imageService: ImageService,
 ) {
     @Transactional
-    fun createSalePost(id: Long, request: CreateSalePostRequest) : Long{
-        val member = memberRepository.findById(id).orElseThrow{
-            throw ResourceNotFoundException("Member", id)
+    fun createSalePost(memberId: Long, request: CreateSalePostRequest) : Long{
+        val member = memberRepository.findById(memberId).orElseThrow{
+            throw ResourceNotFoundException("Member", memberId)
         }
         val location = locationService.getLocation(request.longitude, request.latitude)
         val command = request.toCommand(member, location)
         val post = SalePost.create(command)
 
-        val imageUrls = imageService.uploadImage(request.imageIds)
+        val imageUrls = imageService.uploadImage(memberId, request.imageIds)
         val salePostImages = imageUrls.map { url ->
             SalePostImage(
                 salePost = post,
