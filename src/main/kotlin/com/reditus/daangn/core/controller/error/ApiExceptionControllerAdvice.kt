@@ -1,5 +1,6 @@
 package com.reditus.daangn.core.controller.error
 
+import com.reditus.daangn.core.exception.ResourceNotFoundException
 import io.jsonwebtoken.JwtException
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -45,6 +46,19 @@ class ApiExceptionControllerAdvice {
             HttpStatus.UNAUTHORIZED
         )
     }
+
+    @ExceptionHandler
+    fun resourceNotFoundException(e: ResourceNotFoundException): ResponseEntity<ErrorResponse> {
+        log.error("ResourceNotFoundException", e)
+        return ResponseEntity(
+            ErrorResponse(
+                code = "RESOURCE-NOT-FOUND-EXCEPTION",
+                message = e.message ?: "RESOURCE-NOT-FOUND-EXCEPTION",
+            ),
+            HttpStatus.NOT_FOUND
+        )
+    }
+
     @ExceptionHandler
     fun runtimeException(e: RuntimeException): ResponseEntity<ErrorResponse> {
         log.error("RuntimeException", e)
