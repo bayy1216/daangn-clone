@@ -3,6 +3,7 @@ package com.reditus.daangn.core.controller.swagger
 import io.swagger.v3.oas.models.Components
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.info.Info
+import io.swagger.v3.oas.models.security.SecurityRequirement
 import io.swagger.v3.oas.models.security.SecurityScheme
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -14,15 +15,11 @@ class SwaggerConfig {
     fun openAPI(): OpenAPI = OpenAPI()
         .components(components())
         .info(apiInfo())
+        .addSecurityItem(SecurityRequirement().addList("bearer-key"))
 
     private fun components() = Components()
         .addSecuritySchemes("bearer-key", bearerJwtSecurityScheme())
 
-
-    /**
-     * Bearer JWT Security Scheme
-     * 컨트롤러에서 사용하려면 @SecurityRequirement(name = "bearer-key") 를 사용해야함
-     */
     private fun bearerJwtSecurityScheme() = SecurityScheme()
         .type(SecurityScheme.Type.HTTP)
         .scheme("bearer")
