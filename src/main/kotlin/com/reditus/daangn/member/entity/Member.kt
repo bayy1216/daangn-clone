@@ -43,6 +43,13 @@ class Member(
         )
     }
 
+    /**
+     * 회원 탈퇴. 회원의 상태를 DELETED로 변경한다.
+     */
+    fun delete() {
+        this.state = MemberState.DELETED
+    }
+
     companion object{
         fun create(command: MemberCreateCommand): Member {
             return Member(

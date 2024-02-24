@@ -1,5 +1,6 @@
 package com.reditus.daangn.member.service
 
+import com.reditus.daangn.core.utils.findByIdOrThrow
 import com.reditus.daangn.member.controller.dto.request.EmailSignupRequest
 import com.reditus.daangn.member.entity.Member
 import com.reditus.daangn.member.repository.MemberRepository
@@ -18,6 +19,12 @@ class MemberService(
         }
         val member = Member.create(command)
         return memberRepository.save(member).id!!
+    }
+
+    @Transactional
+    fun deleteMember(id: Long) {
+        val member = memberRepository.findByIdOrThrow(id)
+        member.delete()
     }
 
 
