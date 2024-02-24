@@ -12,6 +12,7 @@ import com.reditus.daangn.saleposts.controller.dto.response.SalePostDto
 import com.reditus.daangn.saleposts.domain.SalePostCategory
 import com.reditus.daangn.saleposts.service.SalePostService
 import jakarta.validation.Valid
+import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -20,6 +21,7 @@ class SalePostController(
     private val salePostService: SalePostService
 ) {
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     fun pagingSalePost(
         @Login memberAuth: MemberAuth,
         requestParam : PagingSalePostsParams
@@ -28,22 +30,26 @@ class SalePostController(
     }
 
     @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     fun getSalePostDetail(@PathVariable id: Long): SalePostDetailResponse {
         val dto = salePostService.getSalePostDetail(id)
         return SalePostDetailResponse(data = dto)
     }
 
     @PostMapping
-    fun createSalePost(@Login memberAuth: MemberAuth, @Valid @RequestBody request: CreateSalePostRequest) {
-        salePostService.createSalePost(memberAuth.id, request)
+    @ResponseStatus(HttpStatus.CREATED)
+    fun createSalePost(@Login memberAuth: MemberAuth, @Valid @RequestBody request: CreateSalePostRequest) : Long{
+        return salePostService.createSalePost(memberAuth.id, request)
     }
 
     @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     fun updateSalePost(@Login memberAuth: MemberAuth, @PathVariable id: Long, @Valid @RequestBody request: UpdateSalePostRequest) {
         salePostService.updateSalePost(memberAuth.id, id, request)
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteSalePost(@Login memberAuth: MemberAuth, @PathVariable id: Long) {
         salePostService.deleteSalePost(memberAuth.id, id)
     }
