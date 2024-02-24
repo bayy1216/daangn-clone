@@ -50,6 +50,18 @@ class Member(
         this.state = MemberState.DELETED
     }
 
+    /**
+     * 로그인시, 회원의 상태를 검증한다.
+     */
+    fun validCheck(): Boolean {
+        return when(state){
+            MemberState.ACTIVE -> true
+            MemberState.INACTIVE -> throw IllegalArgumentException("비활성화된 회원입니다.")
+            MemberState.DELETED -> throw IllegalArgumentException("탈퇴한 회원입니다.")
+            MemberState.BLOCKED -> throw IllegalArgumentException("제제로 인해 차단된 회원입니다.")
+        }
+    }
+
     companion object{
         fun create(command: MemberCreateCommand): Member {
             return Member(
