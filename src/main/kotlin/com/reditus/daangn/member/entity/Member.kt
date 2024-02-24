@@ -12,6 +12,7 @@ class Member(
     val id: Long? = null,
 
     var nickname: String,
+    @Column(unique = true)
     var email: String,
     var password: String?,
     var profileImageUrl: String?,
