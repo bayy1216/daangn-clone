@@ -1,12 +1,14 @@
 spring: # test profile
   datasource:
-    url: "jdbc:h2:mem:library;MODE=MYSQL;NON_KEYWORDS=USER"
+    url: "jdbc:h2:mem:library;MODE=POSTGRESQL;"
     username: "sa"
     password: ""
     driver-class-name: org.h2.Driver
   jpa:
     hibernate:
       ddl-auto: create
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
@@ -21,6 +23,46 @@ logging:
         SQL: debug
         type: trace
 jwt:
-  secret: "b9ba604a99274bf89bfafdaf95ae5a9bdasdsafassaf"
+  secret: ${JWT_SECRET:b9ba604a99274bf89bfafdaf95ae5a9bdasdsafassaf}
   access-token-expire-time: 1800000
   refresh-token-expire-time: 2592000000
+
+---
+spring: # dev profile
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:mysql://${DB_URL:daangn_postgresql}:${DB_PORT:5432}/${DB_NAME:daangn_db}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:root}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:mysql://${DB_URL:localhost}:${DB_PORT:5432}/${DB_NAME:daangn_db}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:root}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: info
+        type: info
