@@ -10,6 +10,10 @@ plugins {
 	id("com.ewerk.gradle.plugins.querydsl") version "1.0.10"
 }
 
+tasks.jar {
+	enabled = false // don't create a plain.jar file
+}
+
 group = "com.reditus"
 version = "0.0.1-SNAPSHOT"
 
