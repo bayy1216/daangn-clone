@@ -1,5 +1,7 @@
 package com.reditus.daangn.saleposts.repository
 
+import com.querydsl.core.types.dsl.BooleanExpression
+import com.querydsl.core.types.dsl.Expressions
 import com.querydsl.jpa.impl.JPAQueryFactory
 import com.reditus.daangn.saleposts.domain.SalePostCategory
 import com.reditus.daangn.saleposts.domain.SalePostStatus
@@ -31,9 +33,9 @@ class SalePostQueryRepository(
      */
     fun getPagingSalePost(pageable: Pageable, category: SalePostCategory?, detailAddress: String?, keyword: String?):Page<SalePost> {
         val whereCondition = categoryEq(category)
-            ?.and(locationEq(detailAddress))
-            ?.and(keywordContains(keyword))
-            ?.and(
+            .and(locationEq(detailAddress))
+            .and(keywordContains(keyword))
+            .and(
                 QSalePost.salePost.status.eq(SalePostStatus.ACTIVE)
                     .or(QSalePost.salePost.status.eq(SalePostStatus.IN_PROGRESS)
                     .or(QSalePost.salePost.status.eq(SalePostStatus.SOLD)))
@@ -58,15 +60,21 @@ class SalePostQueryRepository(
     }
 
 
-    fun categoryEq(category: SalePostCategory?) = category?.let {
-        QSalePost.salePost.category.eq(category)
+    fun categoryEq(category: SalePostCategory?): BooleanExpression {
+        return category?.let {
+            QSalePost.salePost.category.eq(category)
+        } ?: Expressions.TRUE
     }
 
-    fun locationEq(detailAddress: String?) = detailAddress?.let {
-        QSalePost.salePost.location.detailAddress.eq(detailAddress)
+    fun locationEq(detailAddress: String?): BooleanExpression {
+        return detailAddress?.let {
+            QSalePost.salePost.location.detailAddress.eq(detailAddress)
+        } ?: Expressions.TRUE
     }
 
-    fun keywordContains(keyword: String?) = keyword?.let {
-        QSalePost.salePost.title.contains(keyword)
+    fun keywordContains(keyword: String?): BooleanExpression {
+        return keyword?.let {
+            QSalePost.salePost.title.contains(keyword)
+        } ?: Expressions.TRUE
     }
 }
