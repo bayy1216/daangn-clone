@@ -26,6 +26,9 @@ logging:
       hibernate:
         SQL: debug
         type: trace
+springdoc:
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
 jwt:
   secret: ${JWT_SECRET:b9ba604a99274bf89bfafdaf95ae5a9bdasdsafassaf}
   access-token-expire-time: 1800000
