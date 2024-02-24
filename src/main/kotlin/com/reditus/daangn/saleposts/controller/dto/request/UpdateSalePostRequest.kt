@@ -1,15 +1,15 @@
 package com.reditus.daangn.saleposts.controller.dto.request
 
 import com.reditus.daangn.location.entity.Location
-import com.reditus.daangn.member.entity.Member
 import com.reditus.daangn.saleposts.domain.SalePostCategory
 import com.reditus.daangn.saleposts.entity.LocationInfo
 import com.reditus.daangn.saleposts.entity.SalePostCreateCommand
+import com.reditus.daangn.saleposts.entity.SalePostUpdateCommand
 import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 
-data class CreateSalePostRequest(
+data class UpdateSalePostRequest(
     @field: NotBlank(message = "제목을 입력해주세요.")
     val title: String,
     @field: NotBlank(message = "설명을 입력해주세요.")
@@ -26,9 +26,8 @@ data class CreateSalePostRequest(
     @field: NotNull(message = "이미지를 입력해주세요.")
     val imageIds: List<Long>
 ){
-    fun toCommand(member: Member, location: Location): SalePostCreateCommand {
-        return SalePostCreateCommand(
-            member = member,
+    fun toCommand(location: Location): SalePostUpdateCommand {
+        return SalePostUpdateCommand(
             title = title,
             description = description,
             price = price,
@@ -38,7 +37,7 @@ data class CreateSalePostRequest(
                 latitude = latitude,
                 longitude = longitude,
                 locationName = locationName
-            )
+            ),
         )
     }
 }

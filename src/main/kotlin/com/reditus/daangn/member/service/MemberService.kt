@@ -19,4 +19,6 @@ class MemberService(
         val member = Member.create(command)
         return memberRepository.save(member).id!!
     }
+
+
 }

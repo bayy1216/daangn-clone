@@ -31,6 +31,25 @@ class SalePost(
     var status:SalePostStatus,
 ) : BaseTimeEntity(){
 
+    /**
+     * 게시글 status를 DELETED로 변경
+     */
+    fun delete(){
+        this.status = SalePostStatus.DELETED
+    }
+
+    /**
+     * 게시글 정보를 업데이트
+     */
+    fun update(command: SalePostUpdateCommand) {
+        this.title = command.title
+        this.price = command.price
+        this.description = command.description
+        this.location = command.location
+        this.locationInfo = command.locationInfo
+        this.category = command.category
+    }
+
     companion object{
         fun create(command: SalePostCreateCommand): SalePost {
             return SalePost(
@@ -122,6 +141,15 @@ class CountInfo(
 
 data class SalePostCreateCommand(
     val member: Member,
+    val title: String,
+    val price: Int,
+    val description: String,
+    val location: Location,
+    val locationInfo: LocationInfo,
+    val category: SalePostCategory,
+)
+
+data class SalePostUpdateCommand(
     val title: String,
     val price: Int,
     val description: String,
