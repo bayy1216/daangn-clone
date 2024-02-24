@@ -50,6 +50,13 @@ class SalePost(
         this.category = command.category
     }
 
+    /**
+     * 조회수 증가
+     */
+    fun increaseViewCount(){
+        this.countInfo.viewCount++
+    }
+
     companion object{
         fun create(command: SalePostCreateCommand): SalePost {
             return SalePost(

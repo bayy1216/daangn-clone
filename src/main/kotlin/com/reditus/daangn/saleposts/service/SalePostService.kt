@@ -92,9 +92,12 @@ class SalePostService(
         post.delete()
     }
 
+    @Transactional
     fun getSalePostDetail(postId: Long): SalePostDetailDto {
         val post = salePostQueryRepository.findByIdWithMemberAndLocation(postId) ?: throw ResourceNotFoundException("SalePost", postId)
         val imageUrls = salePostImageRepository.findAllBySalePostId(postId).map { it.imageUrl }
+
+        post.increaseViewCount()
         return SalePostDetailDto.from(post, imageUrls)
     }
 }
