@@ -36,8 +36,7 @@ class ImageServiceV0 : ImageService {
 
         return userFile?.filter {
             val name = it.nameWithoutExtension
-            val fileId = name.substringAfter("-")
-            imageIds.contains(fileId)
+            imageIds.contains(name)
         }?.toList() ?: emptyList()
     }
 
@@ -59,8 +58,7 @@ class ImageServiceV0 : ImageService {
         val userFile = folder.listFiles() ?: throw IllegalArgumentException("이미지가 존재하지 않습니다.")
         val files = userFile.filter {
             val name = it.nameWithoutExtension
-            val fileId = name.substringAfter("-")
-            imageIds.contains(fileId)
+            imageIds.contains(name)
         }
         if(files.size != imageIds.size){
             throw IllegalArgumentException("이미지가 존재하지 않습니다.")
