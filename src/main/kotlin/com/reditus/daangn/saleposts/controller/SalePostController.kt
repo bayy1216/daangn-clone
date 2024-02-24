@@ -6,6 +6,8 @@ import com.reditus.daangn.core.jwt.MemberAuth
 import com.reditus.daangn.saleposts.controller.dto.request.CreateSalePostRequest
 import com.reditus.daangn.saleposts.controller.dto.request.PagingSalePostsParams
 import com.reditus.daangn.saleposts.controller.dto.request.UpdateSalePostRequest
+import com.reditus.daangn.saleposts.controller.dto.response.SalePostDetailDto
+import com.reditus.daangn.saleposts.controller.dto.response.SalePostDetailResponse
 import com.reditus.daangn.saleposts.controller.dto.response.SalePostDto
 import com.reditus.daangn.saleposts.domain.SalePostCategory
 import com.reditus.daangn.saleposts.service.SalePostService
@@ -23,6 +25,12 @@ class SalePostController(
         requestParam : PagingSalePostsParams
     ) : PagingResponse<SalePostDto> {
         return salePostService.pagingSalePost(memberAuth.id, requestParam)
+    }
+
+    @GetMapping("/{id}")
+    fun getSalePostDetail(@PathVariable id: Long): SalePostDetailResponse {
+        val dto = salePostService.getSalePostDetail(id)
+        return SalePostDetailResponse(data = dto)
     }
 
     @PostMapping

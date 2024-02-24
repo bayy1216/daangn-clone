@@ -10,6 +10,8 @@ import com.reditus.daangn.member.repository.MemberRepository
 import com.reditus.daangn.saleposts.controller.dto.request.CreateSalePostRequest
 import com.reditus.daangn.saleposts.controller.dto.request.PagingSalePostsParams
 import com.reditus.daangn.saleposts.controller.dto.request.UpdateSalePostRequest
+import com.reditus.daangn.saleposts.controller.dto.response.SalePostDetailDto
+import com.reditus.daangn.saleposts.controller.dto.response.SalePostDetailResponse
 import com.reditus.daangn.saleposts.controller.dto.response.SalePostDto
 import com.reditus.daangn.saleposts.entity.SalePost
 import com.reditus.daangn.saleposts.entity.SalePostImage
@@ -88,5 +90,11 @@ class SalePostService(
         }
 
         post.delete()
+    }
+
+    fun getSalePostDetail(postId: Long): SalePostDetailDto {
+        val post = salePostQueryRepository.findByIdWithMemberAndLocation(postId) ?: throw ResourceNotFoundException("SalePost", postId)
+        val imageUrls = salePostImageRepository.findAllBySalePostId(postId).map { it.imageUrl }
+        return SalePostDetailDto.from(post, imageUrls)
     }
 }

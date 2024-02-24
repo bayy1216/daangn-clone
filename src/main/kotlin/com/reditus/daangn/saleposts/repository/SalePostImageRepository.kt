@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface SalePostImageRepository : JpaRepository<SalePostImage, Long> {
     fun findFirstBySalePostId(salePostId: Long): SalePostImage?
+    fun findAllBySalePostId(salePostId: Long): List<SalePostImage>
 }

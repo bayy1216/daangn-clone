@@ -15,6 +15,16 @@ class SalePostQueryRepository(
     private val jpaQueryFactory: JPAQueryFactory,
 ) {
 
+    fun findByIdWithMemberAndLocation(id: Long): SalePost? {
+        return jpaQueryFactory
+            .select(QSalePost.salePost)
+            .from(QSalePost.salePost)
+            .join(QSalePost.salePost.member).fetchJoin()
+            .join(QSalePost.salePost.location).fetchJoin()
+            .where(QSalePost.salePost.id.eq(id))
+            .fetchOne()
+    }
+
 
     /**
      * 판매글 페이징 조회 : [Member]와 Fetch Join으로 Member와의 N+1 문제 해결
