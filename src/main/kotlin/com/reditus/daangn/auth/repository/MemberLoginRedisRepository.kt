@@ -27,7 +27,11 @@ class MemberLoginRedisRepository(
      */
     fun getLoginFailCount(email: String): Int? {
         val key = generateLoginKey(email)
-        return redisTemplate.opsForValue().get(key).toString().toInt()
+        val value =  redisTemplate.opsForValue().get(key)
+        value?.let {
+            return it.toString().toInt()
+        }
+        return null
     }
 
     /**

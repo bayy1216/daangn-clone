@@ -9,6 +9,7 @@ import com.reditus.daangn.saleposts.controller.dto.request.UpdateSalePostRequest
 import com.reditus.daangn.saleposts.controller.dto.response.SalePostDetailDto
 import com.reditus.daangn.saleposts.controller.dto.response.SalePostDetailResponse
 import com.reditus.daangn.saleposts.controller.dto.response.SalePostDto
+import com.reditus.daangn.saleposts.controller.dto.response.SearchKeywordResponse
 import com.reditus.daangn.saleposts.domain.SalePostCategory
 import com.reditus.daangn.saleposts.service.SalePostService
 import jakarta.validation.Valid
@@ -52,5 +53,12 @@ class SalePostController(
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteSalePost(@Login memberAuth: MemberAuth, @PathVariable id: Long) {
         salePostService.deleteSalePost(memberAuth.id, id)
+    }
+
+    @GetMapping("/search-history")
+    @ResponseStatus(HttpStatus.OK)
+    fun getSearchHistory(@Login memberAuth: MemberAuth): SearchKeywordResponse {
+        val keywords =  salePostService.getSearchHistory(memberAuth.id)
+        return SearchKeywordResponse(keywords = keywords)
     }
 }
