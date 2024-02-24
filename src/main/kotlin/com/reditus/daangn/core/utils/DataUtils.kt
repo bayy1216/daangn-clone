@@ -17,10 +17,3 @@ class DataUtils {
     }
 }
 
-/**
- * 임시용 API
- */
-@Retention(AnnotationRetention.SOURCE)
-annotation class TemporaryApi(
-    val reason: String = "임시용 API"
-)

@@ -1,7 +1,6 @@
 package com.reditus.daangn.image
 
-import com.reditus.daangn.core.utils.TemporaryApi
-import org.springframework.beans.factory.annotation.Autowired
+import com.reditus.daangn.core.aop.TemporaryApi
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import java.io.File
