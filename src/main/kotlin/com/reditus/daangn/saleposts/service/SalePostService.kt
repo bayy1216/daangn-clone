@@ -14,6 +14,7 @@ import com.reditus.daangn.saleposts.controller.dto.response.SalePostDto
 import com.reditus.daangn.saleposts.entity.SalePost
 import com.reditus.daangn.saleposts.entity.SalePostImage
 import com.reditus.daangn.saleposts.repository.SalePostImageRepository
+import com.reditus.daangn.saleposts.repository.SalePostQueryRepository
 import com.reditus.daangn.saleposts.repository.SalePostRepository
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
@@ -24,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional
 class SalePostService(
     private val memberRepository: MemberRepository,
     private val salePostRepository: SalePostRepository,
+    private val salePostQueryRepository: SalePostQueryRepository,
     private val salePostImageRepository: SalePostImageRepository,
     private val locationService: LocationService,
     private val imageService: ImageService,
@@ -53,8 +55,12 @@ class SalePostService(
 
     @TemporaryApi("섬네일 이미지 불러오기 N+1 문제 존재")
     fun pagingSalePost(id: Long, requestParam: PagingSalePostsParams) :PagingResponse<SalePostDto>{
-        val data = salePostRepository.findAllByOrderById(PageRequest.of(requestParam.page, requestParam.size))
-
+        val data = salePostQueryRepository.getPagingSalePost(
+            pageable = PageRequest.of(requestParam.page, requestParam.size),
+            category =  requestParam.category,
+            detailAddress = requestParam.detailAddress,
+            keyword = requestParam.keyword
+        )
         val dto = data.map {
             val imageUrl = salePostImageRepository.findFirstBySalePostId(it.id!!)?.imageUrl
             SalePostDto.from(it, imageUrl)
