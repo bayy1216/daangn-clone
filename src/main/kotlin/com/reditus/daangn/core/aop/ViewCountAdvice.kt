@@ -39,7 +39,7 @@ class ViewCountAdvice(
         }
 
         // Redis Key 및 Value가 모두 채워졌는지 확인
-        if (redisKey.isEmpty() || redisValue.isEmpty()) {
+        if (redisKey==viewCount.key || redisValue==viewCount.value) {
             throw RuntimeException("ViewCount AOP 구현 오류")
         }
 
