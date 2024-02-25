@@ -11,14 +11,13 @@ import com.reditus.daangn.saleposts.controller.dto.request.CreateSalePostRequest
 import com.reditus.daangn.saleposts.controller.dto.request.PagingSalePostsParams
 import com.reditus.daangn.saleposts.controller.dto.request.UpdateSalePostRequest
 import com.reditus.daangn.saleposts.controller.dto.response.SalePostDetailDto
-import com.reditus.daangn.saleposts.controller.dto.response.SalePostDetailResponse
 import com.reditus.daangn.saleposts.controller.dto.response.SalePostDto
 import com.reditus.daangn.saleposts.entity.SalePost
 import com.reditus.daangn.saleposts.entity.SalePostImage
 import com.reditus.daangn.saleposts.repository.SalePostImageRepository
 import com.reditus.daangn.saleposts.repository.SalePostQueryRepository
 import com.reditus.daangn.saleposts.repository.SalePostRepository
-import com.reditus.daangn.saleposts.repository.SalePostSearchRedisRepository
+import com.reditus.daangn.saleposts.repository.SalePostRedisRepository
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -32,7 +31,7 @@ class SalePostService(
     private val salePostImageRepository: SalePostImageRepository,
     private val locationService: LocationService,
     private val imageService: ImageService,
-    private val salePostSearchRedisRepository: SalePostSearchRedisRepository
+    private val salePostRedisRepository: SalePostRedisRepository
 ) {
     @Transactional
     fun createSalePost(memberId: Long, request: CreateSalePostRequest) : Long{
@@ -63,7 +62,7 @@ class SalePostService(
          * 검색 키워드 존재시, Redis에 키워드 저장
          */
         if(requestParam.keyword !=null){
-            salePostSearchRedisRepository.saveSearchKeyword(id, requestParam.keyword)
+            salePostRedisRepository.saveSearchKeyword(id, requestParam.keyword)
         }
 
         val data = salePostQueryRepository.getPagingSalePost(
@@ -102,15 +101,15 @@ class SalePostService(
     }
 
     @Transactional
-    fun getSalePostDetail(postId: Long): SalePostDetailDto {
+    fun getSalePostDetail(postId: Long, memberId: Long): SalePostDetailDto {
         val post = salePostQueryRepository.findByIdWithMemberAndLocation(postId) ?: throw ResourceNotFoundException("SalePost", postId)
         val imageUrls = salePostImageRepository.findAllBySalePostId(postId).map { it.imageUrl }
 
-        post.increaseViewCount()
+        salePostRedisRepository.saveViewMemberId(postId, memberId)
         return SalePostDetailDto.from(post, imageUrls)
     }
 
     fun getSearchHistory(memberId: Long): Set<String> {
-        return salePostSearchRedisRepository.getSearchKeywords(memberId)
+        return salePostRedisRepository.getSearchKeywords(memberId)
     }
 }

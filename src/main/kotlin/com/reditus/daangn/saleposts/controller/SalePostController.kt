@@ -47,8 +47,8 @@ class SalePostController(
     )
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    fun getSalePostDetail(@PathVariable id: Long): SalePostDetailResponse {
-        val dto = salePostService.getSalePostDetail(id)
+    fun getSalePostDetail(@Login memberAuth: MemberAuth ,@PathVariable id: Long): SalePostDetailResponse {
+        val dto = salePostService.getSalePostDetail(id, memberAuth.id)
         return SalePostDetailResponse(data = dto)
     }
 

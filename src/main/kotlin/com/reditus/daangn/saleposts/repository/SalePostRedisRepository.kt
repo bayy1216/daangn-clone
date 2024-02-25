@@ -4,7 +4,7 @@ import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Repository
 
 @Repository
-class SalePostSearchRedisRepository(
+class SalePostRedisRepository(
     private val redisTemplate: RedisTemplate<String, Any>
 ) {
     private val LIMIT = 20L
@@ -40,7 +40,23 @@ class SalePostSearchRedisRepository(
         return resp
     }
 
-    fun generateSearchKey(memberId: Long): String {
+    private fun generateSearchKey(memberId: Long): String {
         return "search-keyword:$memberId"
+    }
+
+    fun saveViewMemberId(salePostId: Long, memberId: Long) {
+        val key = generateViewCountKey(salePostId)
+        //redis set에 memberId 저장 SADD사용하기
+        redisTemplate.opsForSet().add(key, "$memberId")
+    }
+
+    fun getViewMemberId(salePostId: Long): Long {
+        val key = generateViewCountKey(salePostId)
+        //redis set에서 memberId 가져오기 SCARD사용하기
+        return redisTemplate.opsForSet().size(key) ?: 0
+    }
+
+    private fun generateViewCountKey(salePostId: Long): String {
+        return "salepost:view:$salePostId"
     }
 }
