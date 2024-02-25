@@ -9,6 +9,7 @@ import com.reditus.daangn.saleposts.controller.dto.request.UpdateSalePostRequest
 import com.reditus.daangn.saleposts.controller.dto.response.SalePostDetailResponse
 import com.reditus.daangn.saleposts.controller.dto.response.SalePostDto
 import com.reditus.daangn.saleposts.controller.dto.response.SearchKeywordResponse
+import com.reditus.daangn.saleposts.service.SalePostQueryService
 import com.reditus.daangn.saleposts.service.SalePostService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -21,7 +22,8 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/api/v1/saleposts")
 class SalePostController(
-    private val salePostService: SalePostService
+    private val salePostService: SalePostService,
+    private val salePostQueryService: SalePostQueryService,
 ) {
 
     @Operation(
@@ -36,7 +38,7 @@ class SalePostController(
         @Login memberAuth: MemberAuth,
         requestParam : PagingSalePostsParams
     ) : PagingResponse<SalePostDto> {
-        return salePostService.pagingSalePost(memberAuth.id, requestParam)
+        return salePostQueryService.pagingSalePost(memberAuth.id, requestParam)
     }
 
     @Operation(
@@ -48,7 +50,7 @@ class SalePostController(
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     fun getSalePostDetail(@Login memberAuth: MemberAuth ,@PathVariable id: Long): SalePostDetailResponse {
-        val dto = salePostService.getSalePostDetail(id, memberAuth.id)
+        val dto = salePostQueryService.getSalePostDetail(id, memberAuth.id)
         return SalePostDetailResponse(data = dto)
     }
 
@@ -97,7 +99,7 @@ class SalePostController(
     @GetMapping("/search-history")
     @ResponseStatus(HttpStatus.OK)
     fun getSearchHistory(@Login memberAuth: MemberAuth): SearchKeywordResponse {
-        val keywords =  salePostService.getSearchHistory(memberAuth.id)
+        val keywords =  salePostQueryService.getSearchHistory(memberAuth.id)
         return SearchKeywordResponse(keywords = keywords)
     }
 }
