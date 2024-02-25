@@ -4,6 +4,7 @@ import org.aspectj.lang.JoinPoint
 import org.aspectj.lang.annotation.AfterReturning
 import org.aspectj.lang.annotation.Aspect
 import org.aspectj.lang.reflect.MethodSignature
+import org.slf4j.LoggerFactory
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Component
 
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component
 class ViewCountAdvice(
     private val redisTemplate: RedisTemplate<String, Any>,
 ) {
+    private val logger = LoggerFactory.getLogger(this::class.java)
     @AfterReturning("@annotation(viewCount)", returning="returnValue")
     fun countSaveAfter(joinPoint: JoinPoint, viewCount: ViewCount, returnValue: Any?) {
         // Redis Key 및 Value 생성
@@ -43,6 +45,7 @@ class ViewCountAdvice(
 
         // Redis Set자료구조에 SADD 명령어를 통해 Key에 Value를 추가
         redisTemplate.opsForSet().add(redisKey, redisValue)
+        logger.debug("[Redis SADD] Key : $redisKey, Value : $redisValue")
     }
 }
 
