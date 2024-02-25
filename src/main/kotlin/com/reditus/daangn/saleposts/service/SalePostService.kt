@@ -3,6 +3,7 @@ package com.reditus.daangn.saleposts.service
 import com.reditus.daangn.core.controller.dto.PagingResponse
 import com.reditus.daangn.core.exception.ResourceNotFoundException
 import com.reditus.daangn.core.aop.TemporaryApi
+import com.reditus.daangn.core.aop.ViewCount
 import com.reditus.daangn.core.utils.findByIdOrThrow
 import com.reditus.daangn.image.ImageService
 import com.reditus.daangn.location.service.LocationService
@@ -101,11 +102,10 @@ class SalePostService(
     }
 
     @Transactional
+    @ViewCount(key = "salepost:view:#postId", value = "#memberId")
     fun getSalePostDetail(postId: Long, memberId: Long): SalePostDetailDto {
         val post = salePostQueryRepository.findByIdWithMemberAndLocation(postId) ?: throw ResourceNotFoundException("SalePost", postId)
         val imageUrls = salePostImageRepository.findAllBySalePostId(postId).map { it.imageUrl }
-
-        salePostRedisRepository.saveViewMemberId(postId, memberId)
         return SalePostDetailDto.from(post, imageUrls)
     }
 
