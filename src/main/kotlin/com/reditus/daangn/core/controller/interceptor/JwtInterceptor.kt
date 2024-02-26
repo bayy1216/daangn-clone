@@ -5,6 +5,7 @@ import com.reditus.daangn.core.controller.interceptor.annotation.JwtFilterExclus
 import com.reditus.daangn.core.domain.MemberType
 import com.reditus.daangn.core.jwt.JwtProvider
 import com.reditus.daangn.core.utils.DataUtils
+import io.jsonwebtoken.JwtException
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.stereotype.Component
@@ -35,7 +36,7 @@ class JwtInterceptor(
         val rawString = request.getHeader("Authorization") ?: throw IllegalArgumentException("Authorization 헤더가 존재하지 않습니다.")
         val token = dataUtils.extractAuthorizationHeader(header= rawString, isLogin = false)
         if(!jwtProvider.validateToken(token)){
-            throw IllegalArgumentException("토큰이 유효하지 않습니다.")
+            throw JwtException("토큰이 유효하지 않습니다.")
         }
         val memberAuth = jwtProvider.extractMemberAuth(token)
 
@@ -46,7 +47,7 @@ class JwtInterceptor(
         val checkAdmin = checkAnnotation(handler, Admin::class)
         if (checkAdmin) {
             if (memberAuth.type != MemberType.ADMIN) {
-                throw IllegalArgumentException("권한이 없습니다.")
+                throw JwtException("권한이 없습니다.")
             }
             return true
         }

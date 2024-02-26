@@ -4,70 +4,61 @@ import com.reditus.daangn.core.exception.ResourceNotFoundException
 import io.jsonwebtoken.JwtException
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
 @RestControllerAdvice
 class ApiExceptionControllerAdvice {
     private val log = LoggerFactory.getLogger(this::class.java)
+
     @ExceptionHandler
-    fun illegalArgumentException(e: IllegalArgumentException): ResponseEntity<ErrorResponse> {
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun illegalArgumentException(e: IllegalArgumentException): ErrorResponse {
         log.info("IllegalArgumentException", e)
-        return ResponseEntity(
-            ErrorResponse(
-                code = "COMMON-ILLEGAL-ARGUMENT-EXCEPTION",
-                message = e.message ?: "COMMON-ILLEGAL-ARGUMENT-EXCEPTION",
-            ),
-            HttpStatus.BAD_REQUEST
+        return ErrorResponse(
+            code = "COMMON-ILLEGAL-ARGUMENT-EXCEPTION",
+            message = e.message ?: "COMMON-ILLEGAL-ARGUMENT-EXCEPTION",
         )
     }
 
     @ExceptionHandler
-    fun illegalStateException(e: IllegalStateException): ResponseEntity<ErrorResponse> {
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    fun illegalStateException(e: IllegalStateException): ErrorResponse {
         log.error("IllegalStateException", e)
-        return ResponseEntity(
-            ErrorResponse(
-                code = "COMMON-ILLEGAL-STATE-EXCEPTION",
-                message = e.message ?: "COMMON-ILLEGAL-STATE-EXCEPTION",
-            ),
-            HttpStatus.INTERNAL_SERVER_ERROR
+        return ErrorResponse(
+            code = "COMMON-ILLEGAL-STATE-EXCEPTION",
+            message = e.message ?: "COMMON-ILLEGAL-STATE-EXCEPTION",
         )
     }
 
     @ExceptionHandler
-    fun jwtException(e: JwtException): ResponseEntity<ErrorResponse> {
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    fun jwtException(e: JwtException): ErrorResponse {
         log.debug("JwtException", e)
-        return ResponseEntity(
-            ErrorResponse(
-                code = "JWT-EXCEPTION",
-                message = e.message ?: "JWT-EXCEPTION",
-            ),
-            HttpStatus.UNAUTHORIZED
+        return ErrorResponse(
+            code = "JWT-EXCEPTION",
+            message = e.message ?: "JWT-EXCEPTION",
         )
     }
 
     @ExceptionHandler
-    fun resourceNotFoundException(e: ResourceNotFoundException): ResponseEntity<ErrorResponse> {
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    fun resourceNotFoundException(e: ResourceNotFoundException): ErrorResponse {
         log.error("ResourceNotFoundException", e)
-        return ResponseEntity(
-            ErrorResponse(
-                code = "RESOURCE-NOT-FOUND-EXCEPTION",
-                message = e.message ?: "RESOURCE-NOT-FOUND-EXCEPTION",
-            ),
-            HttpStatus.NOT_FOUND
+        return ErrorResponse(
+            code = "RESOURCE-NOT-FOUND-EXCEPTION",
+            message = e.message ?: "RESOURCE-NOT-FOUND-EXCEPTION",
         )
     }
 
     @ExceptionHandler
-    fun runtimeException(e: RuntimeException): ResponseEntity<ErrorResponse> {
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    fun runtimeException(e: RuntimeException): ErrorResponse {
         log.error("RuntimeException", e)
-        return ResponseEntity(
-            ErrorResponse(
-                code = "COMMON-RUNTIME-EXCEPTION",
-                message = e.message ?: "COMMON-RUNTIME-EXCEPTION",
-            ),
-            HttpStatus.INTERNAL_SERVER_ERROR
+        return ErrorResponse(
+            code = "COMMON-RUNTIME-EXCEPTION",
+            message = e.message ?: "COMMON-RUNTIME-EXCEPTION",
         )
     }
 }
