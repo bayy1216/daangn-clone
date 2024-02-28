@@ -1,7 +1,6 @@
 package com.reditus.daangn.auth.service
 
 import com.reditus.daangn.auth.repository.MemberLoginRedisRepository
-import com.reditus.daangn.core.exception.ResourceNotFoundException
 import com.reditus.daangn.core.jwt.JwtProvider
 import com.reditus.daangn.core.jwt.JwtToken
 import com.reditus.daangn.core.jwt.MemberAuth
@@ -17,6 +16,7 @@ class AuthService(
 ) {
     fun login(email: String, password: String): JwtToken {
         val member = memberRepository.findByEmail(email) ?: throw IllegalArgumentException("존재하지 않는 이메일입니다.")
+        member.validCheckInLogin()
         val failCount = memberLoginRedisRepository.getLoginFailCount(email) ?: 0
 
         if(failCount >= 5){
@@ -30,7 +30,7 @@ class AuthService(
         }
         memberLoginRedisRepository.deleteLoginFailCount(email)
 
-        member.validCheck()
+
 
         val memberAuth = MemberAuth(member.id!!, member.type)
         return jwtProvider.createToken(memberAuth)
