@@ -26,14 +26,12 @@ data class CreateSalePostRequest(
     @field: NotNull(message = "이미지를 입력해주세요.")
     val imageIds: List<String>
 ){
-    fun toCommand(member: Member, location: Location): SalePostCreateCommand {
+    fun toCommand(): SalePostCreateCommand {
         return SalePostCreateCommand(
-            member = member,
             title = title,
             description = description,
             price = price,
             category = category,
-            location = location,
             locationInfo = LocationInfo(
                 latitude = latitude,
                 longitude = longitude,

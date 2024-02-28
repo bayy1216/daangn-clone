@@ -41,11 +41,11 @@ class SalePost(
     /**
      * 게시글 정보를 업데이트
      */
-    fun update(command: SalePostUpdateCommand) {
+    fun update(command: SalePostUpdateCommand, location: Location){
         this.title = command.title
         this.price = command.price
         this.description = command.description
-        this.location = command.location
+        this.location = location
         this.locationInfo = command.locationInfo
         this.category = command.category
     }
@@ -58,13 +58,13 @@ class SalePost(
     }
 
     companion object{
-        fun create(command: SalePostCreateCommand): SalePost {
+        fun create(member: Member, command: SalePostCreateCommand, location: Location): SalePost {
             return SalePost(
-                member = command.member,
+                member = member,
                 title = command.title,
                 price = command.price,
                 description = command.description,
-                location = command.location,
+                location = location,
                 locationInfo = command.locationInfo,
                 category = command.category,
                 countInfo = CountInfo(viewCount = 0, interestCount = 0, chatCount = 0),
@@ -147,11 +147,9 @@ class CountInfo(
 }
 
 data class SalePostCreateCommand(
-    val member: Member,
     val title: String,
     val price: Int,
     val description: String,
-    val location: Location,
     val locationInfo: LocationInfo,
     val category: SalePostCategory,
 )
@@ -160,7 +158,6 @@ data class SalePostUpdateCommand(
     val title: String,
     val price: Int,
     val description: String,
-    val location: Location,
     val locationInfo: LocationInfo,
     val category: SalePostCategory,
 )
